@@ -10,7 +10,7 @@
             slides.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
 
-        setInterval(nextSlide, 5000);
+        setInterval(nextSlide, 1000);
 
 
         // Initialize Swiper for testimonials

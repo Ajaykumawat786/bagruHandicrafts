@@ -48,9 +48,9 @@
                 <a href="#contact" class="text-gray-600 hover:text-primary transition-colors duration-300">Contact Us</a>
             </nav>
             <div class="flex items-center space-x-4">
-                <button id="loginBtn" class="text-gray-600 hover:text-primary transition-colors duration-300"><i class="fas fa-user"></i> Login</button>
+                <!-- <button id="loginBtn" class="text-gray-600 hover:text-primary transition-colors duration-300"><i class="fas fa-user"></i> Login</button> -->
                 <button id="cartBtn" class="bg-primary hover:bg-orange-600 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300">
-                    <i class="fas fa-shopping-cart mr-2"></i><span> Cart(<span id="cartCount">0</span>) </span>
+                    <i class="fas fa-shopping-cart mr-2"></i><span> Cart(<span id="cart-count">0</span>) </span>
                 </button>
             </div>
             <!-- Mobile Menu Toggle -->
@@ -67,136 +67,6 @@
         </div>
     </header>
 
-<!-- Call to Action Buttons -->
-        <div class="flex justify-center gap-4">
-            <button id="showLoginBtn" class="px-6 py-3 bg-orange-500 text-white rounded-lg font-medium shadow-lg hover:bg-orange-600 transition">
-                <i class="fas fa-sign-in-alt mr-2"></i>Login
-            </button>
-            <button id="showSignupBtn" class="px-6 py-3 border border-orange-500 text-orange-500 rounded-lg font-medium hover:bg-orange-500 hover:text-white transition">
-                <i class="fas fa-user-plus mr-2"></i>Sign Up
-            </button>
-        </div>
-    </div>
-
-    <!-- Login/Signup Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="max-w-md w-full bg-white rounded-xl form-container fade-in overflow-hidden m-4">
-            <!-- Close Button -->
-            <div class="absolute top-4 right-4">
-                <button id="closeModal" class="close-btn text-gray-500 hover:text-gray-700 text-xl">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <!-- Navigation -->
-            <nav class="bg-orange-500 text-white p-4 flex justify-between items-center">
-                <h1 class="text-xl font-bold">Bagru Handicrafts</h1>
-                <div id="authButtons">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-                <div id="userSection" class="hidden">
-                    <span id="usernameDisplay" class="font-medium"></span>
-                    <button id="logoutBtn" class="bg-white text-orange-500 px-4 py-2 rounded-lg font-medium ml-4">Logout</button>
-                </div>
-            </nav>
-
-            <!-- Login Form -->
-            <div id="loginForm" class="p-8">
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
-                
-                <!-- Social Login Buttons -->
-                <div class="flex gap-4 mb-6">
-                    <button class="social-btn flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium">
-                        <i class="fab fa-facebook-f mr-2"></i>Facebook
-                    </button>
-                    <button class="social-btn flex-1 py-2 bg-gray-800 text-white rounded-lg font-medium">
-                        <i class="fab fa-google mr-2"></i>Google
-                    </button>
-                </div>
-                
-                <div class="relative my-6">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Or continue with email</span>
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="loginEmail" class="block text-gray-700 mb-2">Email Address</label>
-                    <input type="email" id="loginEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="loginEmailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email</p>
-                </div>
-                <div class="mb-6">
-                    <label for="loginPassword" class="block text-gray-700 mb-2">Password</label>
-                    <input type="password" id="loginPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="loginPasswordError" class="text-red-500 text-sm mt-1 hidden">Incorrect password</p>
-                </div>
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="rememberMe" class="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-300 rounded">
-                        <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                    </div>
-                    <a href="#" class="text-sm text-orange-500 hover:underline">Forgot password?</a>
-                </div>
-                <button id="loginBtn" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Login</button>
-                <p class="text-center text-gray-600 mt-4">
-                    Don't have an account? 
-                    <a id="switchToSignup" class="text-orange-500 cursor-pointer font-medium hover:underline">Sign Up</a>
-                </p>
-            </div>
-
-            <!-- Signup Form -->
-            <div id="signupForm" class="p-8 hidden">
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
-                
-                <div class="mb-4">
-                    <label for="signupName" class="block text-gray-700 mb-2">Full Name</label>
-                    <input type="text" id="signupName" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="signupNameError" class="text-red-500 text-sm mt-1 hidden">Please enter your name</p>
-                </div>
-                <div class="mb-4">
-                    <label for="signupEmail" class="block text-gray-700 mb-2">Email Address</label>
-                    <input type="email" id="signupEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="signupEmailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email</p>
-                </div>
-                <div class="mb-4">
-                    <label for="signupPassword" class="block text-gray-700 mb-2">Password</label>
-                    <input type="password" id="signupPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="signupPasswordError" class="text-red-500 text-sm mt-1 hidden">Password must be at least 6 characters</p>
-                </div>
-                <div class="mb-6">
-                    <label for="confirmPassword" class="block text-gray-700 mb-2">Confirm Password</label>
-                    <input type="password" id="confirmPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <p id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden">Passwords do not match</p>
-                </div>
-                <div class="flex items-center mb-6">
-                    <input type="checkbox" id="termsAgree" class="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-300 rounded">
-                    <label for="termsAgree" class="ml-2 block text-sm text-gray-700">
-                        I agree to the <a href="#" class="text-orange-500 hover:underline">Terms and Conditions</a>
-                    </label>
-                </div>
-                <button id="signupBtn" class="w-full btn-primary text-white py-1 rounded-lg font-semibold">Sign Up</button>
-                <p class="text-center text-gray-600 mt-4">
-                    Already have an account? 
-                    <a id="switchToLogin" class="text-orange-500 cursor-pointer font-medium hover:underline">Login</a>
-                </p>
-            </div>
-
-            <!-- Success Message -->
-            <div id="successMessage" class="p-8 text-center hidden">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 success-check">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Login Successful!</h2>
-                <p class="text-gray-600">Welcome back, <span id="welcomeUsername" class="font-semibold"></span></p>
-                <button class="mt-6 px-6 py-2 bg-orange-500 text-white rounded-lg font-medium">Continue Shopping</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -218,7 +88,7 @@
                         <h2 class="text-5xl font-bold animate-fadeIn">Authentic Handicrafts</h2>
                         <p class="text-2xl">Treasures of Indian Artistry</p>
                         <p class="#">A curated collection of traditional Indian handicrafts and decorative items.</p>
-                        <a href="#products" class="bg-primary hover:bg-orange-600 text-white px-6 py-3 rounded mt-4 inline-block transition-colors duration-300">Shop Now</a>
+                        <a href="#products" class="bg-primary hover:bg-orange-600 text-white px-6 py-3 rounded mt-4 inline-block transition-colors duration-300 anemi">Shop Now</a>
                     </div>
                 </div>
                 <!-- Slide 2 -->
@@ -317,8 +187,9 @@
             </div>
         </div>
         
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">
             <!-- Products will be loaded here dynamically -->
+             
              
         </div>
     </section>
@@ -507,6 +378,7 @@
 <script src="productData.js"></script>
 <script src="index.js"></script>
 <script src="main.js"></script>
+<script src="one.js"></script>
 <script src="login.js"></script>
 </body>
 </html>
