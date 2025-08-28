@@ -1,7 +1,7 @@
 
-
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
+            const authModal = document.getElementById('authModal');
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
             const successMessage = document.getElementById('successMessage');
@@ -11,24 +11,44 @@
             const welcomeUsername = document.getElementById('welcomeUsername');
             
             // Buttons
-            const loginNavBtn = document.getElementById('loginNavBtn');
-            const signupNavBtn = document.getElementById('signupNavBtn');
+            const showLoginBtn = document.getElementById('showLoginBtn');
+            const showSignupBtn = document.getElementById('showSignupBtn');
             const switchToSignup = document.getElementById('switchToSignup');
             const switchToLogin = document.getElementById('switchToLogin');
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
             const logoutBtn = document.getElementById('logoutBtn');
+            const closeModal = document.getElementById('closeModal');
+            
+            // Show modal when login/signup buttons are clicked
+            showLoginBtn.addEventListener('click', function() {
+                showModal();
+                showLoginForm();
+            });
+            
+            showSignupBtn.addEventListener('click', function() {
+                showModal();
+                showSignupForm();
+            });
+            
+            // Close modal when clicking outside
+            authModal.addEventListener('click', function(e) {
+                if (e.target === authModal) {
+                    hideModal();
+                }
+            });
+            
+            // Close modal when clicking close button
+            closeModal.addEventListener('click', hideModal);
             
             // Check if user is already logged in
             checkLoginStatus();
             
             // Switch to Signup Form
             switchToSignup.addEventListener('click', showSignupForm);
-            signupNavBtn.addEventListener('click', showSignupForm);
             
             // Switch to Login Form
             switchToLogin.addEventListener('click', showLoginForm);
-            loginNavBtn.addEventListener('click', showLoginForm);
             
             // Signup Button Click
             signupBtn.addEventListener('click', handleSignup);
@@ -39,16 +59,28 @@
             // Logout Button Click
             logoutBtn.addEventListener('click', handleLogout);
             
+            function showModal() {
+                authModal.classList.remove('hidden');
+                authModal.classList.add('flex');
+            }
+            
+            function hideModal() {
+                authModal.classList.add('hidden');
+                authModal.classList.remove('flex');
+            }
+            
             function showSignupForm() {
                 loginForm.classList.add('hidden');
                 signupForm.classList.remove('hidden');
                 successMessage.classList.add('hidden');
+                signupForm.classList.add('slide-in');
             }
             
             function showLoginForm() {
                 signupForm.classList.add('hidden');
                 loginForm.classList.remove('hidden');
                 successMessage.classList.add('hidden');
+                loginForm.classList.add('slide-in');
             }
             
             function showSuccessMessage(username) {
@@ -93,6 +125,11 @@
                     isValid = false;
                 }
                 
+                if (!document.getElementById('termsAgree').checked) {
+                    alert('Please agree to the Terms and Conditions');
+                    isValid = false;
+                }
+                
                 if (isValid) {
                     // Save user data to local storage
                     const userData = {
@@ -112,6 +149,7 @@
                     document.getElementById('signupEmail').value = '';
                     document.getElementById('signupPassword').value = '';
                     document.getElementById('confirmPassword').value = '';
+                    document.getElementById('termsAgree').checked = false;
                 }
             }
             
@@ -155,6 +193,9 @@
                             
                             updateUIOnLogin(userData.name);
                             showSuccessMessage(userData.name);
+                            
+                            // Auto close modal after 2 seconds
+                            setTimeout(hideModal, 2000);
                         } else {
                             document.getElementById('loginPasswordError').classList.remove('hidden');
                         }
@@ -183,7 +224,6 @@
                     
                     if (loginData.isLoggedIn) {
                         updateUIOnLogin(loginData.username);
-                        showSuccessMessage(loginData.username);
                     } else {
                         showLoginForm();
                     }

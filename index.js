@@ -1,11 +1,11 @@
-    //  Include product data and functions -->
+//  Include product data and functions -->
 
 
         // Cart array to store items
         let cart = [];
 
         // Function to render products
-        function renderProducts(productsToRender) {
+        function renderProducts(productsToRender) {     
             const productGrid = document.getElementById('productGrid');
             productGrid.innerHTML = '';
             
@@ -18,8 +18,9 @@
                     ? `<span class="line-through text-gray-500">₹${product.originalPrice}</span>` 
                     : '';
                 
+                // Rating property fix (assume rating is a number or string)
                 const rating = product.rating 
-                    ? `<p class="text-yellow-500 text-sm">★${product.rating.stars} <span class="text-gray-500">(${product.rating.count})</span></p>` 
+                    ? `<p class="text-yellow-500 text-sm">★${product.rating}</p>` 
                     : '';
 
                 const productCard = document.createElement('div');
@@ -131,81 +132,265 @@
                     filterProducts(this.dataset.category);
                 });
             });
-        });
-    
 
+            // --- main.js logic below ---
 
-        
+            // Image Slider Animation
+            const slides = document.querySelector('.slides');
+            let currentSlide = 0;
+            const slideCount = 5;
 
-        
-        // Mobile Menu Toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
-
-        // Auth Modal
-        const authModal = document.getElementById('authModal');
-        const loginBtn = document.getElementById('loginBtn');
-        const closeModal = document.getElementById('closeModal');
-        const toggleAuth = document.getElementById('toggleAuth');
-        const modalTitle = document.getElementById('modalTitle');
-        const toggleText = document.getElementById('toggleText');
-        const authForm = document.getElementById('authForm');
-
-        loginBtn.addEventListener('click', () => {
-            authModal.classList.remove('hidden');
-            modalTitle.textContent = 'Login';
-            toggleText.textContent = "Don't have an account? ";
-            toggleAuth.textContent = 'Signup';
-        });
-
-        closeModal.addEventListener('click', () => {
-            authModal.classList.add('hidden');
-        });
-
-        toggleAuth.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (modalTitle.textContent === 'Login') {
-                modalTitle.textContent = 'Signup';
-                toggleText.textContent = 'Already have an account? ';
-                toggleAuth.textContent = 'Login';
-            } else {
-                modalTitle.textContent = 'Login';
-                toggleText.textContent = "Don't have an account? ";
-                toggleAuth.textContent = 'Signup';
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slideCount;
+                if (slides) {
+                    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+                }
             }
+
+            // Start slider only if slides exist
+            if (slides) {
+                setInterval(nextSlide, 5000);
+            }
+
+            // Initialize Swiper for testimonials if it exists
+            if (typeof Swiper !== 'undefined') {
+                const testimonialSwiper = document.querySelector(".testimonialSwiper");
+                if (testimonialSwiper) {
+                    new Swiper(".testimonialSwiper", {
+                        slidesPerView: 1,
+                        spaceBetween: 30,
+                        loop: true,
+                        pagination: {
+                            el: ".swiper-pagination",
+                            clickable: true,
+                        },
+                        autoplay: {
+                            delay: 5000,
+                            disableOnInteraction: false,
+                        },
+                        breakpoints: {
+                            640: {
+                                slidesPerView: 1,
+                            },
+                            768: {
+                                slidesPerView: 2,
+                            },
+                            1024: {
+                                slidesPerView: 3,
+                            },
+                        },
+                    });
+                }
+
+                // Initialize Swiper for product gallery if it exists
+                const productSwiper = document.querySelector(".productSwiper");
+                if (productSwiper) {
+                    new Swiper(".productSwiper", {
+                        slidesPerView: 1,
+                        spaceBetween: 10,
+                        loop: true,
+                        pagination: {
+                            el: ".swiper-pagination",
+                            clickable: true,
+                        },
+                    });
+                }
+            }
+
+            // GSAP Animations if available
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Hero text animation
+                gsap.from("h1", {
+                    duration: 1,
+                    y: 50,
+                    opacity: 0,
+                    ease: "power3.out"
+                });
+
+                // Highlight cards animation
+                gsap.from(".card-hover", {
+                    scrollTrigger: {
+                        trigger: ".card-hover",
+                        start: "top 80%",
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.2,
+                    ease: "power2.out"
+                });
+
+                // Product cards animation
+                gsap.from(".product-card", {
+                    scrollTrigger: {
+                        trigger: ".product-card",
+                        start: "top 80%",
+                    },
+                    duration: 1,
+                    y: 50,
+                    opacity: 0,
+                    stagger: 0.3,
+                    ease: "power3.out"
+                });
+
+                // Counter animation
+                const counters = document.querySelectorAll('#years-counter, #products-counter, #artisans-counter');
+                
+                if (counters.length > 0) {
+                    ScrollTrigger.create({
+                        trigger: "#years-counter",
+                        start: "top 80%",
+                        onEnter: () => {
+                            if (typeof animateCounter === 'function') {
+                                animateCounter("years-counter", 0, 28, 2000);
+                                animateCounter("products-counter", 0, 12500, 2000);
+                                animateCounter("artisans-counter", 0, 47, 2000);
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Counter animation function
+            function animateCounter(id, start, end, duration) {
+                let obj = document.getElementById(id);
+                if (!obj) return;
+                
+                let range = end - start;
+                let current = start;
+                let increment = end > start ? 1 : -1;
+                let stepTime = Math.abs(Math.floor(duration / range));
+                let timer = setInterval(() => {
+                    current += increment;
+                    obj.textContent = current.toLocaleString();
+                    if (current == end) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+
+            // Form validation
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('name');
+                    const email = document.getElementById('email');
+                    const phone = document.getElementById('phone');
+                    const message = document.getElementById('message');
+                    
+                    if (!name || !email || !message) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    if (!isValidEmail(email.value)) {
+                        alert('Please enter a valid email address');
+                        return;
+                    }
+                    
+                    // Here you would typically send the form data to your server
+                    // For demonstration, we'll just show an alert
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                });
+            }
+
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            // Mobile menu functionality
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (menuToggle && mobileMenu) {
+                // Toggle menu on hamburger click
+                menuToggle.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking on a menu link
+                const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function (event) {
+                    const isClickInsideMenu = mobileMenu.contains(event.target);
+                    const isClickOnToggle = menuToggle.contains(event.target);
+
+                    if (!isClickInsideMenu && !isClickOnToggle) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add fade-in animation to elements when they come into view
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fadeIn');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.animate-fadeIn').forEach(el => {
+                observer.observe(el);
+            });
+
+            console.log('Main.js initialization complete');
         });
 
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert(modalTitle.textContent + ' successful!');
-            authModal.classList.add('hidden');
-        });
-
-        // Cart Functionality
-        // const cart = [];
+        // Cart Modal functionality
         const cartModal = document.getElementById('cartModal');
         const cartBtn = document.getElementById('cartBtn');
         const closeCart = document.getElementById('closeCart');
         const cartItems = document.getElementById('cartItems');
-        const cartCount = document.getElementById('cartCount');
 
-        cartBtn.addEventListener('click', () => {
-            cartModal.classList.remove('hidden');
-            renderCart();
-        });
+        if (cartBtn && cartModal) {
+            cartBtn.addEventListener('click', () => {
+                cartModal.classList.remove('hidden');
+                renderCart();
+            });
+        }
 
-        closeCart.addEventListener('click', () => {
-            cartModal.classList.add('hidden');
-        });
-
-        function addToCart(name, price, image) {
-            cart.push({ name, price, image });
-            cartCount.textContent = cart.length;
-            alert(name + ' added to cart!');
+        if (closeCart && cartModal) {
+            closeCart.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+            });
         }
 
         function renderCart() {
+            if (!cartItems) return;
+            
             cartItems.innerHTML = '';
             if (cart.length === 0) {
                 cartItems.innerHTML = '<p class="text-center">Your cart is empty.</p>';
@@ -217,7 +402,7 @@
                         <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover mr-4">
                         <div class="flex-1">
                             <h3 class="font-bold">${item.name}</h3>
-                            <p class="text-primary">${item.price}</p>
+                            <p class="text-primary">₹${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                     `;
@@ -228,36 +413,155 @@
 
         function removeFromCart(index) {
             cart.splice(index, 1);
-            cartCount.textContent = cart.length;
+            updateCartCounter();
             renderCart();
+            localStorage.setItem('cart', JSON.stringify(cart));
         }
 
-        // Image Slider Animation
-        const slides = document.querySelector('.slides');
-        let currentSlide = 0;
-        const slideCount = 5;
+        // Auth Modal
+        const authModal = document.getElementById('authModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeModal = document.getElementById('closeModal');
+        const toggleAuth = document.getElementById('toggleAuth');
+        const modalTitle = document.getElementById('modalTitle');
+        const toggleText = document.getElementById('toggleText');
+        const authForm = document.getElementById('authForm');
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slideCount;
-            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
+        // Nav ke andar jaha username dikhana hoga
+        const navUser = document.getElementById('navUser'); 
 
-        setInterval(nextSlide, 5000);
+        if (loginBtn && authModal && closeModal && toggleAuth && modalTitle && toggleText && authForm) {
+            loginBtn.addEventListener('click', () => {
+                authModal.classList.remove('hidden');
+                modalTitle.textContent = 'Login';
+                toggleText.textContent = "Don't have an account? ";
+                toggleAuth.textContent = 'Signup';
+            });
 
-        // Product Filtering
-        function filterProducts(category) {
-            const products = document.querySelectorAll('.product');
-            products.forEach(product => {
-                if (category === 'all' || product.classList.contains(`category-${category}`)) {
-                    product.style.display = 'block';
+            closeModal.addEventListener('click', () => {
+                authModal.classList.add('hidden');
+            });
+
+            toggleAuth.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (modalTitle.textContent === 'Login') {
+                    modalTitle.textContent = 'Signup';
+                    toggleText.textContent = 'Already have an account? ';
+                    toggleAuth.textContent = 'Login';
                 } else {
-                    product.style.display = 'none';
+                    modalTitle.textContent = 'Login';
+                    toggleText.textContent = "Don't have an account? ";
+                    toggleAuth.textContent = 'Signup';
                 }
             });
-            // Scroll to products section
-            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+
+            authForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Dummy username lete hain (real project me backend se aayega)
+                const username = "Ajay";
+
+                alert(modalTitle.textContent + ' successful!');
+                authModal.classList.add('hidden');
+
+                // Navbar update karega
+                if (navUser) {
+                    navUser.textContent = username;
+                    navUser.classList.remove('hidden');
+                }
+
+                // Login button hatana
+                loginBtn.classList.add('hidden');
+            });
         }
 
-        // Initial show all
-        filterProducts('all');
-    
+        // Toggle menu
+        const menuToggleBtn = document.getElementById("menu-toggle");
+        const menuDiv = document.getElementById("menu");
+
+        if (menuToggleBtn && menuDiv) {
+            menuToggleBtn.addEventListener("click", function (event) {
+                event.stopPropagation(); // click bubble रोकने के लिए
+                menuDiv.classList.toggle("hidden");
+            });
+
+            // Menu के बाहर क्लिक पर hide
+            document.addEventListener("click", function (event) {
+                if (!menuDiv.contains(event.target) && !menuToggleBtn.contains(event.target)) {
+                    menuDiv.classList.add("hidden");
+                }
+            });
+        }
+
+        // Login submit
+        const loginForm = document.getElementById("login-form");
+        if (loginForm) {
+            loginForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                // Add your login logic here
+            });
+        }
+
+        // Cursor logic (GSAP)
+        window.addEventListener('DOMContentLoaded', () => {
+            const dot = document.getElementById('cursorDot');
+            const ring = document.getElementById('cursorRing');
+
+            if (!dot || !ring || typeof gsap === 'undefined') return;
+
+            // quickTo gives buttery responsiveness
+            const qxDot  = gsap.quickTo(dot,  'x', { duration: 0.12, ease: 'power3' });
+            const qyDot  = gsap.quickTo(dot,  'y', { duration: 0.12, ease: 'power3' });
+            const qxRing = gsap.quickTo(ring, 'x', { duration: 0.22, ease: 'power3' });
+            const qyRing = gsap.quickTo(ring, 'y', { duration: 0.22, ease: 'power3' });
+
+            // initial centre
+            let mouseX = innerWidth/2, mouseY = innerHeight/2;
+            qxDot(mouseX); qyDot(mouseY); qxRing(mouseX); qyRing(mouseY);
+
+            // move handler
+            function onMove(e){
+                mouseX = e.clientX; mouseY = e.clientY;
+                qxDot(mouseX); qyDot(mouseY);
+                // ring lags slightly for depth
+                qxRing(mouseX); qyRing(mouseY);
+            }
+            window.addEventListener('mousemove', onMove);
+
+            // subtle ring scaling on "fast" movement
+            let last = performance.now(), lastX = mouseX, lastY = mouseY;
+            function measureSpeed(){
+                const now = performance.now();
+                const dx = mouseX - lastX, dy = mouseY - lastY;
+                const dist = Math.hypot(dx, dy);
+                // scale ring based on recent speed
+                const speedFactor = gsap.utils.clamp(dist / 30, 0, 1.6);
+                gsap.to(ring, { scale: 1 + speedFactor*0.25, duration: 0.25, ease: 'power2.out' });
+                last = now; lastX = mouseX; lastY = mouseY;
+            }
+            // throttle using requestAnimationFrame
+            (function rafLoop(){
+                measureSpeed();
+                requestAnimationFrame(rafLoop);
+            })();
+
+            // show/hide when leaving window
+            window.addEventListener('mouseleave', ()=> gsap.to([dot, ring], { autoAlpha: 0, duration: 0.18 }));
+            window.addEventListener('mouseenter', ()=> gsap.to([dot, ring], { autoAlpha: 1, duration: 0.18 }));
+
+            // click feedback: quick scale pulse
+            window.addEventListener('mousedown', ()=> {
+                gsap.fromTo(dot, { scale: 0.9 }, { scale: 1.6, duration: 0.18, ease:'power2.out', yoyo:true, repeat:1 });
+                gsap.fromTo(ring, { scale: gsap.getProperty(ring,'scale') || 1 }, { scale: 2.2, opacity:0.25, duration:0.28, ease:'power2.out', onComplete: ()=> gsap.to(ring, { scale:1, opacity:0.8, duration:0.18 }) });
+            });
+
+            // Accessibility toggle: press C to enable native cursor
+            let enabled = true;
+            window.addEventListener('keydown', (e)=>{
+                if(e.key === 'c' || e.key === 'C'){
+                    enabled = !enabled;
+                    document.body.style.cursor = enabled ? 'none' : 'auto';
+                    gsap.to([dot, ring], { autoAlpha: enabled ? 1 : 0, duration: .16 });
+                }
+            });
+        });

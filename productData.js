@@ -9,7 +9,7 @@ for (let i = 1; i <= 77; i++) {
     discount: "40",
     image: `assets/image/copal/onepice (${i}).jpeg`,
     category: "onePiece",
-    rating: "5 Star"
+    rating: "5"
   });
 }
 
@@ -22,7 +22,7 @@ for (let i = 1; i <= 85; i++) {
     discount: "25",
     image: `assets/image/Sarees/Sarees (${i}).jpeg`,
     category: "sarees",
-    rating: "5 Star"
+    rating: "5"
   });
 }
 
@@ -35,7 +35,7 @@ for (let i = 1; i <= 77; i++) {
     discount: "30",
     image: `assets\\image\\copal\\copal02 (${i}).jpeg`,
     category: "onePiece",
-    rating: "5 Star"
+    rating: "5"
   });
 }
 
@@ -49,7 +49,7 @@ for (let i = 1; i <= 85; i++) {
     discount: "40",
     image: `assets/image/shuit/fab (${i}).jpeg`,
     category: "fabric",
-    rating: "5 Star"
+    rating: "5"
   });
 }
 console.log(products);
